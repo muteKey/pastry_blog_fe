@@ -1,25 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
+import React from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      recipes: []
+    };
+  }
+
+  componentWillMount() {
+    fetch('http://127.0.0.1:8000/api/recipes/')
+      .then((response) => response.json())
+      .then((data) => this.setState({recipes: data}));
+  }
+
+  render() {
+    const { recipes } = this.state;
+    const items = recipes.map((recipe) => 
+      <div>
+        <p>{recipe.title}</p>
+        <textarea>{recipe.text}</textarea>
+      </div>
+    );
+    return items;
+  }
 }
 
 export default App;
